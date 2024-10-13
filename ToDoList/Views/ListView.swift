@@ -9,28 +9,23 @@ import SwiftUI
 
 struct ListView: View {
     
-    @State var items: [String] = [
-        "Belajar iOS DEV",
-        "Belajar SwiftUI",
-        "Belajar Combine",
-        "Belajar Core Data",
-        "Belajar Networking",
-        "Belajar Unit Testing",
-        "Belajar UI Testing",
-        "Belajar CI/CD",
-        "Belajar Design Pattern",
-        "Belajar Clean Code",
-        "Belajar SOLID Principle",
-        "Belajar Design System",
-        "Belajar Git",
-        "Belajar GitHub",
-        "Belajar GitLab",
+    @State var items: [ItemModel] = [
+        ItemModel(title: "Belajar iOS DEV", isComplete: false),
+        ItemModel(title: "Belajar SwiftUI", isComplete: false),
+        ItemModel(title: "Belajar Combine", isComplete: false),
+        ItemModel(title: "Belajar Core Data", isComplete: false),
+        ItemModel(title: "Belajar Networking", isComplete: false),
+        ItemModel(title: "Belajar Unit Testing", isComplete: false),
+        ItemModel(title: "Belajar UI Testing", isComplete: false),
+        ItemModel(title: "Belajar Design Pattern", isComplete: false),
+        ItemModel(title: "Belajar Clean Code", isComplete: false),
+        ItemModel(title: "Belajar SOLID Principle", isComplete: false),
     ]
     
     var body: some View {
         List {
-            ForEach(items, id: \.self) { item in
-                ListRowView(title: item)
+            ForEach(items) { item in
+                ListRowView(item: item)
             }
         }
         .listStyle(PlainListStyle())
