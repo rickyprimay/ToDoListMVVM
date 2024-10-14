@@ -9,26 +9,26 @@ import Foundation
 
 class ListViewModel: ObservableObject {
     
-    @Published var items: [ItemModel] = []
+    @Published var items: [ItemModel] = [] {
+        didSet {
+            saveItem()
+        }
+    }
+    
+    
+    let itemsKey: String = "items_list"
     
     init() {
         getItems()
     }
     
     func getItems() {
-      let newItems = [
-        ItemModel(title: "Belajar iOS DEV", isComplete: false),
-        ItemModel(title: "Belajar SwiftUI", isComplete: false),
-        ItemModel(title: "Belajar Combine", isComplete: false),
-        ItemModel(title: "Belajar Core Data", isComplete: false),
-        ItemModel(title: "Belajar Networking", isComplete: false),
-        ItemModel(title: "Belajar Unit Testing", isComplete: false),
-        ItemModel(title: "Belajar UI Testing", isComplete: false),
-        ItemModel(title: "Belajar Design Pattern", isComplete: false),
-        ItemModel(title: "Belajar Clean Code", isComplete: false),
-        ItemModel(title: "Belajar SOLID Principle", isComplete: false),
-      ]
-        items.append(contentsOf: newItems)
+        guard
+            let data = UserDefaults.standard.data(forKey: itemsKey),
+            let savedItems = try? JSONDecoder().decode([ItemModel].self, from: data)
+        else { return }
+        
+        self.items = savedItems
     }
     
     func deleteItem(indexSet: IndexSet) {
@@ -49,4 +49,11 @@ class ListViewModel: ObservableObject {
             items[index] = item.updateCompletion()
         }
     }
+    
+    func saveItem() {
+        if let encodedData = try? JSONEncoder().encode(items) {
+            UserDefaults.standard.set(encodedData, forKey: itemsKey)
+        }
+    }
+    
 }
