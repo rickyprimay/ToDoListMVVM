@@ -9,24 +9,20 @@ import SwiftUI
 
 struct ListView: View {
     
-    @State var items: [ItemModel] = [
-        ItemModel(title: "Belajar iOS DEV", isComplete: false),
-        ItemModel(title: "Belajar SwiftUI", isComplete: false),
-        ItemModel(title: "Belajar Combine", isComplete: false),
-        ItemModel(title: "Belajar Core Data", isComplete: false),
-        ItemModel(title: "Belajar Networking", isComplete: false),
-        ItemModel(title: "Belajar Unit Testing", isComplete: false),
-        ItemModel(title: "Belajar UI Testing", isComplete: false),
-        ItemModel(title: "Belajar Design Pattern", isComplete: false),
-        ItemModel(title: "Belajar Clean Code", isComplete: false),
-        ItemModel(title: "Belajar SOLID Principle", isComplete: false),
-    ]
+    @EnvironmentObject var listViewModel: ListViewModel
     
     var body: some View {
         List {
-            ForEach(items) { item in
+            ForEach(listViewModel.items) { item in
                 ListRowView(item: item)
+                    .onTapGesture {
+                        withAnimation(.bouncy) {
+                            listViewModel.updateItem(item: item)
+                        }
+                    }
             }
+            .onDelete(perform: listViewModel.deleteItem)
+            .onMove(perform: listViewModel.moveItem)
         }
         .listStyle(PlainListStyle())
         .navigationTitle("To Do List 📈")
@@ -42,5 +38,6 @@ struct ListView: View {
     NavigationView {
         ListView()
     }
+    .environmentObject(ListViewModel())
 }
 
